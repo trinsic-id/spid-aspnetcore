@@ -9,7 +9,7 @@ namespace SPID.AspNetCore.Authentication.Models.ServiceProviders
         public string FileName { get; set; }
         public Guid Id { get; set; }
         public X509Certificate2 Certificate { get; set; }
-        public string Language { get; set; } = "it";
+        public string[] Languages { get; set; } = ["it", "en"];
         public List<SingleLogoutService> SingleLogoutServiceLocations { get; set; } = new();
         public List<AssertionConsumerService> AssertionConsumerServices { get; set; } = new();
         public List<AttributeConsumingService> AttributeConsumingServices { get; set; } = new();

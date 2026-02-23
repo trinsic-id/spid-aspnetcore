@@ -83,8 +83,8 @@ namespace SPID.AspNetCore.Authentication.Models.ServiceProviders
                         }).ToArray(),
                         AttributeConsumingService = AttributeConsumingServices.Select(s => new Saml.Aggregated.AttributeConsumingServiceType(){
                             index = s.Index,
-                            ServiceName = new Saml.Aggregated.localizedNameType[]{ new Saml.Aggregated.localizedNameType(){lang = Language, Value = s.ServiceName } },
-                            ServiceDescription = new Saml.Aggregated.localizedNameType[]{ new Saml.Aggregated.localizedNameType(){lang = Language, Value = s.ServiceDescription } },
+                            ServiceName = Languages.Select(Language => new Saml.Aggregated.localizedNameType(){lang = Language, Value = s.ServiceName }).ToArray(),
+                            ServiceDescription = Languages.Select(Language => new Saml.Aggregated.localizedNameType(){lang = Language, Value = s.ServiceDescription }).ToArray(),
                             RequestedAttribute = s.ClaimTypes.Select(c => new Saml.Aggregated.RequestedAttributeType(){
                                 NameFormat = SamlConst.RequestedAttributeNameFormat,
                                 Name = c.GetSamlAttributeName()
@@ -94,9 +94,9 @@ namespace SPID.AspNetCore.Authentication.Models.ServiceProviders
                 },
                 Organization = new Saml.Aggregated.OrganizationType()
                 {
-                    OrganizationDisplayName = new Saml.Aggregated.localizedNameType[] { new Saml.Aggregated.localizedNameType { lang = Language, Value = OrganizationDisplayName } },
-                    OrganizationName = new Saml.Aggregated.localizedNameType[] { new Saml.Aggregated.localizedNameType { lang = Language, Value = OrganizationName } },
-                    OrganizationURL = new Saml.Aggregated.localizedURIType[] { new Saml.Aggregated.localizedURIType { lang = Language, Value = OrganizationURL } },
+                    OrganizationDisplayName = Languages.Select(Language => new Saml.Aggregated.localizedNameType { lang = Language, Value = OrganizationDisplayName }).ToArray(),
+                    OrganizationName = Languages.Select(Language => new Saml.Aggregated.localizedNameType { lang = Language, Value = OrganizationName }).ToArray(),
+                    OrganizationURL = Languages.Select(Language => new Saml.Aggregated.localizedURIType { lang = Language, Value = OrganizationURL }).ToArray(),
                 },
                 ContactPerson = new Saml.Aggregated.ContactType[] {
                     new Saml.Aggregated.ContactType(){
