@@ -144,13 +144,17 @@ namespace SPID.AspNetCore.Authentication
                 properties.Load(Request, Options.StateDataFormat);
 
                 var idpName = properties.GetIdentityProviderName();
-                var request = properties.GetAuthenticationRequest();
 
                 var responseMessageReceivedResult = await _eventsHandler.HandleAuthenticationResponseMessageReceived(Context, Scheme, Options, properties, message);
                 if (responseMessageReceivedResult.Result != null)
                 {
                     return responseMessageReceivedResult.Result;
                 }
+
+                // TRINSIC CHANGE: We fetch `request` here, instead of before the call to `HandleAuthenticationResponseMessageReceived()`,
+                // because the `CustomSpidEvents.MessageReceived()` event implementation may need to swap out the context's request,
+                // so we want to read after that (may have) occurred.
+                var request = properties.GetAuthenticationRequest();
                 message = responseMessageReceivedResult.ProtocolMessage;
                 properties = responseMessageReceivedResult.Properties;
 
