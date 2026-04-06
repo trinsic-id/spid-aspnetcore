@@ -129,7 +129,7 @@ namespace SPID.AspNetCore.Authentication
             }
             message = afterRedirectMessage;
 
-            properties.SetIdentityProviderName(idpName);
+            properties.SetIdentityProviderName(idp.Name);
             properties.SetAuthenticationRequest(message);
             properties.Save(Response, Options.StateDataFormat);
 
