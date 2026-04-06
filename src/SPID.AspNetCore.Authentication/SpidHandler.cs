@@ -91,9 +91,16 @@ namespace SPID.AspNetCore.Authentication
             string authenticationRequestId = Guid.NewGuid().ToString();
 
             // Select the Identity Provider
-            var idpName = Request.Query["idpName"];
-            var idp = (await Options.GetIdentityProviders(httpClientFactory)).FirstOrDefault(x => x.Name == idpName);
-
+            IdentityProvider? idp = null;
+            if (Request.Query.TryGetValue("idpName", out var idpName))
+            {
+                idp = (await Options.GetIdentityProviders(httpClientFactory))
+                    .FirstOrDefault(x => x.Name == idpName);
+            } else if(Request.Query.TryGetValue("idpEntityId", out var idpEntityId))
+            {
+                idp = (await Options.GetIdentityProviders(httpClientFactory))
+                    .FirstOrDefault(x => x.EntityId == idpEntityId);
+            }
 
             var securityTokenCreatingContext = await _eventsHandler.HandleSecurityTokenCreatingContext(Context,
                 Scheme,
