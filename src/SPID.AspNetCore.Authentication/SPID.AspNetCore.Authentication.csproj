@@ -1,27 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
-		<Description>AspNetCore Remote Authenticator for SPID</Description>
-		<Authors>Daniele Giallonardo, Stefano Mostarda</Authors>
-		<AssemblyName>SPID.AspNetCore.Authentication</AssemblyName>
-		<RootNamespace>SPID.AspNetCore.Authentication</RootNamespace>
-		<PackageId>SPID.AspNetCore.Authentication</PackageId>
-		<PackageTags>spid;aspnetcore;authentication</PackageTags>
-		<PackageProjectUrl>https://github.com/italia/spid-aspnetcore</PackageProjectUrl>
-		<PackageIcon>spid-nuget.png</PackageIcon>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageVersion>3.4.0</PackageVersion>
-		<Version>3.4.0</Version>
-		<AssemblyVersion>3.4.0</AssemblyVersion>
-		<FileVersion>3.4.0</FileVersion>
-		<InformationalVersion>3.4.0</InformationalVersion>
-		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/italia/spid-aspnetcore</RepositoryUrl>
-		<RuntimeIdentifiers></RuntimeIdentifiers>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Description>AspNetCore Remote Authenticator for SPID</Description>
+    <Authors>Daniele Giallonardo, Stefano Mostarda</Authors>
+    <AssemblyName>SPID.AspNetCore.Authentication</AssemblyName>
+    <RootNamespace>SPID.AspNetCore.Authentication</RootNamespace>
+    <PackageId>SPID.AspNetCore.Authentication</PackageId>
+    <PackageTags>spid;aspnetcore;authentication</PackageTags>
+    <PackageProjectUrl>https://github.com/italia/spid-aspnetcore</PackageProjectUrl>
+    <PackageIcon>spid-nuget.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageVersion>3.4.0</PackageVersion>
+    <Version>3.4.0</Version>
+    <AssemblyVersion>3.4.0</AssemblyVersion>
+    <FileVersion>3.4.0</FileVersion>
+    <InformationalVersion>3.4.0</InformationalVersion>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/italia/spid-aspnetcore</RepositoryUrl>
+    <RuntimeIdentifiers></RuntimeIdentifiers>
+  </PropertyGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -34,79 +33,79 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.1" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.16" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.16" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.12" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.27" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
   </ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.12" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.20" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
   </ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.21" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.36" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
   </ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Include="Mvc\Resources\spid-nuget.png" Pack="true" PackagePath="\" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="Mvc\Resources\spid-nuget.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Mvc\Resources\eidas.css" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-db.png" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-db.svg" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-lb.png" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-lb.svg" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-ybw.png" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-ybw.svg" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-ywb.png" />
-		<None Remove="Mvc\Resources\ficep-it-eidas-ywb.svg" />
-		<None Remove="Mvc\Resources\spid-ico-circle-bb.png" />
-		<None Remove="Mvc\Resources\spid.css" />
-		<None Remove="Mvc\Resources\spid.js" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="Mvc\Resources\eidas.css" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-db.png" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-db.svg" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-lb.png" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-lb.svg" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-ybw.png" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-ybw.svg" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-ywb.png" />
+    <None Remove="Mvc\Resources\ficep-it-eidas-ywb.svg" />
+    <None Remove="Mvc\Resources\spid-ico-circle-bb.png" />
+    <None Remove="Mvc\Resources\spid.css" />
+    <None Remove="Mvc\Resources\spid.js" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Mvc\Resources\eidas.css" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-db.png" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-db.svg" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-lb.png" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-lb.svg" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ybw.png" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ybw.svg" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ywb.png" />
-		<EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ywb.svg" />
-		<EmbeddedResource Include="Mvc\Resources\spid-nuget.png" />
-		<EmbeddedResource Include="Mvc\Resources\spid.css" />
-		<EmbeddedResource Include="Mvc\Resources\spid.js" />
-		<EmbeddedResource Include="Mvc\Resources\spid-ico-circle-bb.png" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mvc\Resources\eidas.css" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-db.png" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-db.svg" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-lb.png" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-lb.svg" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ybw.png" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ybw.svg" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ywb.png" />
+    <EmbeddedResource Include="Mvc\Resources\ficep-it-eidas-ywb.svg" />
+    <EmbeddedResource Include="Mvc\Resources\spid-nuget.png" />
+    <EmbeddedResource Include="Mvc\Resources\spid.css" />
+    <EmbeddedResource Include="Mvc\Resources\spid.js" />
+    <EmbeddedResource Include="Mvc\Resources\spid-ico-circle-bb.png" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Compile Update="Resources\ErrorLocalization.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>ErrorLocalization.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Update="Resources\ErrorLocalization.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>ErrorLocalization.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\ErrorLocalization.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorLocalization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ErrorLocalization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorLocalization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
