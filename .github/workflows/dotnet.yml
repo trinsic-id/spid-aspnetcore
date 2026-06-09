@@ -30,7 +30,17 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src
     - name: Test
-      run: dotnet test --no-build **/*Tests.csproj
+      run: |
+        test_projects="$(find . -name '*Tests.csproj' -print)"
+
+        if [ -z "$test_projects" ]; then
+          echo "No test projects found."
+          exit 0
+        fi
+
+        while IFS= read -r test_project; do
+          dotnet test --no-build "$test_project"
+        done <<< "$test_projects"
       working-directory: src
     - name: Restore dependencies
       run: dotnet restore
