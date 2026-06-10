@@ -32,12 +32,6 @@
           "Microsoft.Extensions.Options": "6.0.1"
         }
       },
-      "Nullable.Extended.Analyzer": {
-        "type": "Direct",
-        "requested": "[1.15.6581, )",
-        "resolved": "1.15.6581",
-        "contentHash": "lQ025E+aNR34QfXvRiHxNXTHK6JBkvpIIZD2IMk8QyROTZAkqs+PFasEa2xkIC+cN2C0Mw5MRnhX/Wrmz/qKfw=="
-      },
       "System.Security.Cryptography.Xml": {
         "type": "Direct",
         "requested": "[8.0.3, )",
@@ -175,12 +169,6 @@
           "Microsoft.Extensions.Options": "7.0.1"
         }
       },
-      "Nullable.Extended.Analyzer": {
-        "type": "Direct",
-        "requested": "[1.15.6581, )",
-        "resolved": "1.15.6581",
-        "contentHash": "lQ025E+aNR34QfXvRiHxNXTHK6JBkvpIIZD2IMk8QyROTZAkqs+PFasEa2xkIC+cN2C0Mw5MRnhX/Wrmz/qKfw=="
-      },
       "System.Security.Cryptography.Xml": {
         "type": "Direct",
         "requested": "[8.0.3, )",
@@ -307,12 +295,6 @@
           "Microsoft.Extensions.Logging": "8.0.1",
           "Microsoft.Extensions.Options": "8.0.2"
         }
-      },
-      "Nullable.Extended.Analyzer": {
-        "type": "Direct",
-        "requested": "[1.15.6581, )",
-        "resolved": "1.15.6581",
-        "contentHash": "lQ025E+aNR34QfXvRiHxNXTHK6JBkvpIIZD2IMk8QyROTZAkqs+PFasEa2xkIC+cN2C0Mw5MRnhX/Wrmz/qKfw=="
       },
       "System.Security.Cryptography.Xml": {
         "type": "Direct",
@@ -474,12 +456,6 @@
           "Microsoft.Extensions.Logging": "9.0.16",
           "Microsoft.Extensions.Options": "9.0.16"
         }
-      },
-      "Nullable.Extended.Analyzer": {
-        "type": "Direct",
-        "requested": "[1.15.6581, )",
-        "resolved": "1.15.6581",
-        "contentHash": "lQ025E+aNR34QfXvRiHxNXTHK6JBkvpIIZD2IMk8QyROTZAkqs+PFasEa2xkIC+cN2C0Mw5MRnhX/Wrmz/qKfw=="
       },
       "System.Security.Cryptography.Xml": {
         "type": "Direct",
