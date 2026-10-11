@@ -189,7 +189,17 @@ namespace SPID.AspNetCore.Authentication
             }
             catch (Exception exception)
             {
-                Logger.ExceptionProcessingMessage(exception);
+                // A callback without browser state cannot be authenticated, but is not a server error.
+                // Keep errors for cookies that are present but cannot be read, and for other failures.
+                if (exception is SpidException { ErrorCode: SpidErrorCode.SpidPropertiesNotFound }
+                    && !Request.Cookies.ContainsKey(SpidDefaults.CookieName))
+                {
+                    Logger.LogWarning("SPID authentication callback rejected because the session cookie is missing.");
+                }
+                else
+                {
+                    Logger.ExceptionProcessingMessage(exception);
+                }
 
                 var authenticationFailedResult = await _eventsHandler.HandleAuthenticationFailed(Context, Scheme, Options, message, exception);
                 return authenticationFailedResult.Result ?? HandleRequestResult.Fail(exception, properties);
