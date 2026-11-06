@@ -5,6 +5,8 @@ namespace SPID.AspNetCore.Authentication.Events
 {
     public sealed class SecurityTokenCreatingOptions
     {
+        /// <summary>Optional application correlation reference; must fit SAML's 80-byte limit.</summary>
+        public string? RelayState { get; set; }
         public string EntityId { get; set; }
         public string AssertionConsumerServiceURL { get; set; }
         public ushort? AssertionConsumerServiceIndex { get; set; }
