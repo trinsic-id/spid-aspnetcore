@@ -137,7 +137,8 @@ namespace SPID.AspNetCore.Authentication
                 message.ID,
                 securityTokenCreatingContext.TokenOptions.Certificate,
                 idp.GetSingleSignOnServiceUrl(securityTokenCreatingContext.TokenOptions.RequestMethod),
-                securityTokenCreatingContext.TokenOptions.RequestMethod);
+                securityTokenCreatingContext.TokenOptions.RequestMethod,
+                securityTokenCreatingContext.TokenOptions.RelayState);
         }
 
         protected override async Task<HandleRequestResult> HandleRemoteAuthenticateAsync()
@@ -614,10 +615,16 @@ namespace SPID.AspNetCore.Authentication
                 string messageId,
                 X509Certificate2 certificate,
                 string signOnUrl,
-                RequestMethod method)
+                RequestMethod method,
+                string? relayState = null)
                 where T : class
             {
-                var messageGuid = messageId.Replace("_", string.Empty);
+                if (relayState is not null && Encoding.UTF8.GetByteCount(relayState) > 80)
+                {
+                    _logger.LogWarning("Application RelayState exceeds 80 bytes; using the request ID.");
+                    relayState = null;
+                }
+                var messageGuid = relayState ?? messageId.Replace("_", string.Empty);
 
                 var unsignedSerializedMessage = SamlHandler.SerializeMessage(message);
 
@@ -644,7 +651,7 @@ namespace SPID.AspNetCore.Authentication
                 });
                 string htmlContent = $"<html><head><title>Login</title></head><body><form id=\"spidform\" action=\"{url}\" method=\"post\">" +
                            $"<input type=\"hidden\" name=\"SAMLRequest\" value=\"{base64SignedSerializedMessage}\" />" +
-                           $"<input type=\"hidden\" name=\"RelayState\" value=\"{messageGuid}\" />" +
+                           $"<input type=\"hidden\" name=\"RelayState\" value=\"{System.Text.Encodings.Web.HtmlEncoder.Default.Encode(messageGuid)}\" />" +
                            $"<button id=\"btnLogin\" style=\"display: none;\">Login</button>" +
                            "<script>document.getElementById('btnLogin').click()</script>" +
                            "</form></body></html>";
