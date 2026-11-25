@@ -146,7 +146,12 @@ namespace SPID.AspNetCore.Authentication
             ResponseType message = null;
             try
             {
-                (string id, message, string serializedResponse) = await ExtractInfoFromAuthenticationResponse();
+                var response = await ExtractInfoFromAuthenticationResponse();
+                if (response == null)
+                {
+                    return HandleRequestResult.Handle();
+                }
+                (string id, message, string serializedResponse) = response.Value;
 
                 properties.Load(Request, Options.StateDataFormat);
 
@@ -398,7 +403,7 @@ namespace SPID.AspNetCore.Authentication
             return (returnedPrincipal, new DateTimeOffset(idpAuthnResponse.IssueInstant), new DateTimeOffset(idpAuthnResponse.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.NotOnOrAfter));
         }
 
-        private async Task<(string Id, ResponseType Message, string serializedResponse)> ExtractInfoFromAuthenticationResponse()
+        private async Task<(string Id, ResponseType Message, string serializedResponse)?> ExtractInfoFromAuthenticationResponse()
         {
             if (HttpMethods.IsPost(Request.Method)
               && !string.IsNullOrEmpty(Request.ContentType)
@@ -406,7 +411,32 @@ namespace SPID.AspNetCore.Authentication
               && Request.ContentType.StartsWith("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase)
               && Request.Body.CanRead)
             {
-                var form = await Request.ReadFormAsync();
+                var requestAborted = Context.RequestAborted;
+                IFormCollection form;
+                try
+                {
+                    form = await Request.ReadFormAsync(requestAborted);
+                    // ReadFormAsync can return a cached form even if the request was aborted.
+                    requestAborted.ThrowIfCancellationRequested();
+                }
+                catch (Exception ex) when (requestAborted.IsCancellationRequested && ex is OperationCanceledException or IOException)
+                {
+                    Logger.LogInformation("Client disconnected while receiving the SPID authentication callback.");
+                    if (!Response.HasStarted)
+                    {
+                        Response.StatusCode = 499; // Client Closed Request, for request logging.
+                    }
+                    return null;
+                }
+                catch (BadHttpRequestException ex) when (ex.StatusCode is >= 400 and < 500)
+                {
+                    Logger.LogWarning(ex, "Could not read the SPID authentication callback body (HTTP {StatusCode}).", ex.StatusCode);
+                    if (!Response.HasStarted)
+                    {
+                        Response.StatusCode = ex.StatusCode;
+                    }
+                    return null;
+                }
 
                 var serializedResponse = Encoding.UTF8.GetString(Convert.FromBase64String(form["SAMLResponse"].FirstOrDefault()));
 
