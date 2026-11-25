@@ -146,19 +146,12 @@ namespace SPID.AspNetCore.Authentication
             ResponseType message = null;
             try
             {
-                IFormCollection? form = null;
-                if (HttpMethods.IsPost(Request.Method)
-                    && Request.ContentType?.StartsWith("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase) == true
-                    && Request.Body.CanRead)
+                var response = await ExtractInfoFromAuthenticationResponse();
+                if (response == null)
                 {
-                    form = await ReadAuthenticationFormAsync();
-                    if (form == null)
-                    {
-                        return HandleRequestResult.Handle();
-                    }
+                    return HandleRequestResult.Handle();
                 }
-
-                (string id, message, string serializedResponse) = await ExtractInfoFromAuthenticationResponse(form);
+                (string id, message, string serializedResponse) = response.Value;
 
                 properties.Load(Request, Options.StateDataFormat);
 
@@ -410,40 +403,41 @@ namespace SPID.AspNetCore.Authentication
             return (returnedPrincipal, new DateTimeOffset(idpAuthnResponse.IssueInstant), new DateTimeOffset(idpAuthnResponse.GetAssertion().Subject.GetSubjectConfirmation().SubjectConfirmationData.NotOnOrAfter));
         }
 
-        private async Task<IFormCollection?> ReadAuthenticationFormAsync()
+        private async Task<(string Id, ResponseType Message, string serializedResponse)?> ExtractInfoFromAuthenticationResponse()
         {
-            var requestAborted = Context.RequestAborted;
-            try
+            if (HttpMethods.IsPost(Request.Method)
+              && !string.IsNullOrEmpty(Request.ContentType)
+              // May have media/type; charset=utf-8, allow partial match.
+              && Request.ContentType.StartsWith("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase)
+              && Request.Body.CanRead)
             {
-                requestAborted.ThrowIfCancellationRequested();
-                var form = await Request.ReadFormAsync(requestAborted);
-                requestAborted.ThrowIfCancellationRequested();
-                return form;
-            }
-            catch (Exception ex) when (requestAborted.IsCancellationRequested && ex is OperationCanceledException or IOException)
-            {
-                Logger.LogInformation("Client disconnected while receiving the SPID authentication callback.");
-                if (!Response.HasStarted)
+                var requestAborted = Context.RequestAborted;
+                IFormCollection form;
+                try
                 {
-                    Response.StatusCode = 499; // Client Closed Request, for request logging.
+                    form = await Request.ReadFormAsync(requestAborted);
+                    // ReadFormAsync can return a cached form even if the request was aborted.
+                    requestAborted.ThrowIfCancellationRequested();
                 }
-                return null;
-            }
-            catch (BadHttpRequestException ex) when (ex.StatusCode is >= 400 and < 500)
-            {
-                Logger.LogWarning(ex, "Could not read the SPID authentication callback body (HTTP {StatusCode}).", ex.StatusCode);
-                if (!Response.HasStarted)
+                catch (Exception ex) when (requestAborted.IsCancellationRequested && ex is OperationCanceledException or IOException)
                 {
-                    Response.StatusCode = ex.StatusCode;
+                    Logger.LogInformation("Client disconnected while receiving the SPID authentication callback.");
+                    if (!Response.HasStarted)
+                    {
+                        Response.StatusCode = 499; // Client Closed Request, for request logging.
+                    }
+                    return null;
                 }
-                return null;
-            }
-        }
+                catch (BadHttpRequestException ex) when (ex.StatusCode is >= 400 and < 500)
+                {
+                    Logger.LogWarning(ex, "Could not read the SPID authentication callback body (HTTP {StatusCode}).", ex.StatusCode);
+                    if (!Response.HasStarted)
+                    {
+                        Response.StatusCode = ex.StatusCode;
+                    }
+                    return null;
+                }
 
-        private async Task<(string Id, ResponseType Message, string serializedResponse)> ExtractInfoFromAuthenticationResponse(IFormCollection? form)
-        {
-            if (form != null)
-            {
                 var serializedResponse = Encoding.UTF8.GetString(Convert.FromBase64String(form["SAMLResponse"].FirstOrDefault()));
 
                 await logHandler.LogPostResponse(new PostResponse()
